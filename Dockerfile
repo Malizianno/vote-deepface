@@ -28,4 +28,4 @@ COPY . .
 EXPOSE 5001
 
 # Start the microservice
-CMD ["python", "deepface.py"]
+CMD ["python", "deepface_service.py"]
