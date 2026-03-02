@@ -6,8 +6,8 @@ On the first try please run all the steps in order, but for the second attempt, 
 you can run only the steps which contain lines marked with "!".
 
 1. install python3.9.13 with installer from https://www.python.org/downloads/release/python-3913/
-2. make sure environment variables is set (PATH to /bin of python installation folder)
-3. start environment:source facen	
+2. make sure environment variable is set (PATH to /bin of python installation folder)
+3. start environment:
 	$! python -m venv faceenv
 	$! .\faceenv\Scripts\activate
 4. install deepface and other required packages:
