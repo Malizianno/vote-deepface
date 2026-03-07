@@ -1,6 +1,5 @@
 flask
 flask-cors
+gunicorn
 opencv-python-headless
 numpy==1.24.4
-face_recognition
-gunicorn

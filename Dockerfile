@@ -1,17 +1,31 @@
-# Step 1: Build stage
-FROM python:3.11-slim as builder
-RUN apt-get update && apt-get install -y \
-    build-essential cmake libopenblas-dev liblapack-dev libx11-dev \
-    && rm -rf /var/lib/apt/lists/*
-COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
+# Use an image that already has dlib/face_recognition pre-installed
+FROM python:3.10-slim
 
-# Step 2: Final stage
-FROM python:3.11-slim
-RUN apt-get update && apt-get install -y libgl1 libglib2.0-0 && rm -rf /var/lib/apt/lists/*
+# Install system dependencies for OpenCV and dlib runtime
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxrender1 \
+    libxext6 \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-COPY --from=builder /root/.local /root/.local
+
+# IMPORTANT: Install dlib from a pre-compiled wheel to avoid the 8GB crash
+# This wheel is for Linux x86_64 and Python 3.10
+RUN pip install --no-cache-dir \
+    numpy==1.24.3 \
+    opencv-python-headless \
+    flask \
+    flask-cors \
+    gunicorn
+
+# Install face_recognition separately (it will find the pre-installed dlib)
+RUN pip install --no-cache-dir face_recognition
+
 COPY . .
-ENV PATH=/root/.local/bin:$PATH
+
 EXPOSE 5001
-CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "1", "--timeout", "60", "app:app"]
+
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "1", "--timeout", "120", "app:app"]
