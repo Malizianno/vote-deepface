@@ -1,3 +1,11 @@
+---
+title: Face Verification Service
+emoji: 🛡️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+
 # vote-deepface
 
 # test locally
