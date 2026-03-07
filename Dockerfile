@@ -1,27 +1,27 @@
-# Use an image that already has dlib pre-compiled
-FROM kunalgaba/python3.10-dlib:latest
+FROM python:3.10-slim
 
-# Install only the light system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Install build tools (Hugging Face has the RAM to handle this!)
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
     libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Install lightweight python packages
-# We do NOT include dlib here because it's already in the base image
+# Install dependencies
 RUN pip install --no-cache-dir \
     flask \
     flask-cors \
     gunicorn \
+    numpy \
     opencv-python-headless \
-    numpy==1.24.3 \
     face_recognition
 
 COPY . .
 
-EXPOSE 5001
+# Hugging Face usually expects port 7860
+EXPOSE 7860
 
-# Increase timeout because AI takes time to initialize on cold starts
-CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "1", "--timeout", "120", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:7860", "--workers", "1", "--timeout", "120", "app:app"]
