@@ -28,4 +28,4 @@ EXPOSE 5001
 # PRODUCTION COMMAND:
 # --workers 1: Keep it at 1 for Render Free Tier to avoid RAM crashes
 # --timeout 120: AI takes time; don't let the server kill the connection
-CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "1", "--timeout", "120", "deepface_service:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "1","--threads", "1", "--timeout", "120", "--preload", "deepface_service:app"]
