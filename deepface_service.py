@@ -2,6 +2,12 @@ import os
 # Force TensorFlow to use only CPU and be quiet
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+
+import tensorflow as tf
+# Limit TensorFlow to 1 CPU thread to save RAM
+tf.config.threading.set_inter_op_parallelism_threads(1)
+tf.config.threading.set_intra_op_parallelism_threads(1)
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -62,7 +68,8 @@ def verify():
                 img2_path=ref_img,
                 model_name=MODEL_NAME,
                 detector_backend=DETECTOR_BACKEND,
-                enforce_detection=False
+                enforce_detection=False,
+                align=True
             )
             logging.info(f"Verification result: {result}")
 
