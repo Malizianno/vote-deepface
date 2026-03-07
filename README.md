@@ -1,11 +1,12 @@
 ---
 title: Vote Deepface
-emoji: 👁
-colorFrom: grey
-colorTo: blue
+emoji: 🛡️
+colorFrom: blue
+colorTo: indigo
 sdk: docker
-pinned: false
 app_port: 7860
+pinned: false
+---
 
 # vote-deepface
 
