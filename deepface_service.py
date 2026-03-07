@@ -52,7 +52,10 @@ def verify():
             return jsonify({
                 "match": True, 
                 "distance": float(distance),
-                "referenceBase64": ref_base64
+                "referenceBase64": ref_base64,
+                "threshold": 0.5,
+                "model": "dlib-resnet",
+                "similarity_metric": "euclidean"
             })
 
     return jsonify({"match": False})
