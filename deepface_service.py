@@ -45,7 +45,7 @@ def verify():
         if not ref_encodings: continue
         
         # Compare (0.6 is the default tolerance, lower is stricter)
-        match = face_recognition.compare_faces([ref_enc][0], input_enc, tolerance=0.5)
+        match = face_recognition.compare_faces([ref_enc], input_enc, tolerance=0.6)
         
         if match[0]:
             distance = face_recognition.face_distance([ref_enc], input_enc)[0]
@@ -53,9 +53,9 @@ def verify():
                 "match": True, 
                 "distance": float(distance),
                 "referenceBase64": ref_base64,
-                "threshold": 0.5,
+                "threshold": 0.6,
                 "model": "dlib-resnet",
-                "similarity_metric": "euclidean"
+                "similarity_metric": "euclidian"
             })
 
     return jsonify({"match": False})
