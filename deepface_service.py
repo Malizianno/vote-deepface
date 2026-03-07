@@ -1,8 +1,9 @@
 import os
 # Force TensorFlow to use only CPU and be quiet
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+os.environ['OMP_NUM_THREADS'] = '1'
+os.environ['TF_NUM_INTRAOP_THREADS'] = '1'
+os.environ['TF_NUM_INTEROP_THREADS'] = '1'
 
 import tensorflow as tf
 # Limit TensorFlow to 1 CPU thread to save RAM
@@ -25,7 +26,7 @@ logging.basicConfig(level=logging.INFO)
 # OLD_MODEL_NAME = "ArcFace"
 # OLD_DETECTOR_BACKEND = "retinaface"
 
-MODEL_NAME = "VGG-Face"
+MODEL_NAME = "OpenFace"
 DETECTOR_BACKEND = "opencv"
 
 thresholds = {
@@ -69,7 +70,7 @@ def verify():
                 model_name=MODEL_NAME,
                 detector_backend=DETECTOR_BACKEND,
                 enforce_detection=False,
-                align=True
+                align=False
             )
             logging.info(f"Verification result: {result}")
 
