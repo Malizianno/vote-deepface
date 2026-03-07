@@ -1,9 +1,10 @@
 ---
-title: Face Verification Service
-emoji: 🛡️
-colorFrom: blue
-colorTo: indigo
+title: Vote Deepface
+emoji: 👁
+colorFrom: grey
+colorTo: blue
 sdk: docker
+pinned: false
 app_port: 7860
 
 # vote-deepface
