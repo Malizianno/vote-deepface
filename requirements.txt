@@ -1,8 +1,6 @@
 flask
 flask-cors
-deepface
 opencv-python-headless
-tf-keras
-tensorflow==2.11.0
 numpy==1.24.4
+face_recognition
 gunicorn
