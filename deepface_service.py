@@ -1,3 +1,8 @@
+import os
+# Force TensorFlow to use only CPU and be quiet
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from deepface import DeepFace
@@ -11,8 +16,11 @@ CORS(app) # Enable CORS for all routes
 logging.basicConfig(level=logging.INFO)
 
 # Configuration
-MODEL_NAME = "ArcFace"
-DETECTOR_BACKEND = "retinaface"
+# OLD_MODEL_NAME = "ArcFace"
+# OLD_DETECTOR_BACKEND = "retinaface"
+
+MODEL_NAME = "VGG-Face"
+DETECTOR_BACKEND = "opencv"
 
 thresholds = {
     "ArcFace": 0.4,
