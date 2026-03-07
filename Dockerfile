@@ -1,31 +1,31 @@
 FROM python:3.10-slim
 
-# Avoid Python writing .pyc files and enable unbuffered logs
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    # This tells DeepFace where to store models so they don't vanish
+    DEEPFACE_HOME=/app/.deepface 
 
-# Install system dependencies required by DeepFace
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    cmake \
     libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Create app directory
 WORKDIR /app
 
-# Copy requirements first for better caching
+# Create the weights directory and give permissions
+RUN mkdir -p /app/.deepface/weights
+
 COPY requirements.txt .
 
-# Install Python dependencies
+# Add gunicorn to your requirements.txt if it's not there!
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application
 COPY . .
 
-# Expose the port your Flask app uses
 EXPOSE 5001
 
-# Start the microservice
-CMD ["python", "deepface_service.py"]
+# PRODUCTION COMMAND:
+# --workers 1: Keep it at 1 for Render Free Tier to avoid RAM crashes
+# --timeout 120: AI takes time; don't let the server kill the connection
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "1", "--timeout", "120", "deepface_service:app"]
